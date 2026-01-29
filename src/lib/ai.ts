@@ -18,10 +18,24 @@ const FAQSchema = z.object({
   answer: z.string(),
 });
 
+const LinkSchema = z.object({
+  text: z.string(),
+  url: z.string(),
+});
+
+const FeatureSchema = z.object({
+  icon: z.enum(['chart', 'time', 'money', 'users', 'lock', 'zap', 'star', 'heart', 'shield', 'award']), // Limited set for UI mapping
+  title: z.string(),
+  description: z.string(),
+});
+
 const LandingPageSchema = z.object({
   headline: z.string(),
   subheadline: z.string(),
   value_bullets: z.array(z.string()).min(4),
+  features_headline: z.string(),
+  features_subheadline: z.string(),
+  features: z.array(FeatureSchema).min(4), // Enforce 4 features
   call_to_action: z.string(),
   faqs: z.array(FAQSchema).min(3),
 });
@@ -83,7 +97,7 @@ export async function generateOffer(input: UserInput): Promise<AIResponse> {
     1. Analyze their niche and audience pain points.
     2. Brainstorm 3 distinct offer ideas (Digital Product, Service, Subscription).
     3. Select the ONE best offer that yields the highest probability of success.
-    4. Generate a high-converting Landing Page copy for that BEST offer.
+    4. Generate a high-converting Landing Page copy for that BEST offer, including a specific 'Features' section with 4 key benefits/features using icons from this list: [chart, time, money, users, lock, zap, star, heart, shield, award].
 
     Return ONLY valid JSON matching this structure (strict adherence required):
     {
@@ -110,6 +124,14 @@ export async function generateOffer(input: UserInput): Promise<AIResponse> {
         "subheadline": "...",
         "value_bullets": ["Title: Description", "Title: Description", "Title: Description", "Title: Description"],
         "call_to_action": "...",
+        "features_headline": "...",
+        "features_subheadline": "...",
+        "features": [
+          { "icon": "chart", "title": "...", "description": "..." },
+          { "icon": "time", "title": "...", "description": "..." },
+          { "icon": "money", "title": "...", "description": "..." },
+          { "icon": "users", "title": "...", "description": "..." }
+        ],
         "faqs": [
           { "question": "...", "answer": "..." },
           { "question": "...", "answer": "..." },

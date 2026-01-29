@@ -50,6 +50,30 @@ export const MOCK_AI_RESPONSE: AIResponse = {
             "Cancel anytime—keep the templates forever"
         ],
         call_to_action: "Join the Club for $19/mo",
+        features_headline: "Everything you get",
+        features_subheadline: "Tools designed to work with your brain, not against it.",
+        features: [
+            {
+                icon: "chart",
+                title: "Progress Tracking",
+                description: "Visual charts that show your consistency without shaming you for missing a day."
+            },
+            {
+                icon: "time",
+                title: "Quick Capture",
+                description: "Store ideas and tasks in seconds before they float away."
+            },
+            {
+                icon: "users",
+                title: "Community Access",
+                description: "Join 500+ other professionals in our private Discord server."
+            },
+            {
+                icon: "zap",
+                title: "Automation Ready",
+                description: "Pre-built connections to Google Calendar and Slack."
+            }
+        ],
         faqs: [
             {
                 question: "Do I need to be a Notion expert using this?",

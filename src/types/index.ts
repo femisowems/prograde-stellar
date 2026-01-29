@@ -15,10 +15,19 @@ export interface FAQ {
     answer: string;
 }
 
+export interface Feature {
+    icon: string;
+    title: string;
+    description: string;
+}
+
 export interface LandingPageContent {
     headline: string;
     subheadline: string;
     value_bullets: [string, string, string, string] | string[];
+    features_headline: string;
+    features_subheadline: string;
+    features: Feature[];
     call_to_action: string;
     faqs: FAQ[];
 }
