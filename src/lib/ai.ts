@@ -127,17 +127,17 @@ export async function generateOffer(input: UserInput): Promise<AIResponse> {
   let result;
 
   try {
-    // PROMPT: Use gemini-3-flash as requested
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash" });
-    console.log("Attempting generation with gemini-3-flash...");
+    // PROMPT: Use gemini-3-flash-preview (correct name from API list)
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    console.log("Attempting generation with gemini-3-flash-preview...");
     result = await model.generateContent({
       contents: [{ role: "user", parts: requestParts }],
       generationConfig: { responseMimeType: "application/json" }
     });
   } catch (error: any) {
-    console.warn("gemini-3-flash failed, attempting fallback to gemini-1.5-flash. Error:", error.message);
-    // Fallback to 1.5 Flash (More stable/higher quota)
-    const fallbackModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    console.warn("Primary model failed, attempting fallback to gemini-flash-latest. Error:", error.message);
+    // Fallback to gemini-flash-latest (Valid model from list)
+    const fallbackModel = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     result = await fallbackModel.generateContent({
       contents: [{ role: "user", parts: requestParts }],
       generationConfig: { responseMimeType: "application/json" }
