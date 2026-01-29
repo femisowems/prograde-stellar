@@ -1,13 +1,15 @@
 import { LandingPage } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown, ArrowLeft } from "lucide-react";
+import { ContentPreview } from "./content-preview";
 
 interface LandingPageViewProps {
     data: LandingPage;
     onBack: () => void;
+    contentLinks?: string[];
 }
 
-export function LandingPageView({ data, onBack }: LandingPageViewProps) {
+export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPageViewProps) {
     return (
         <div className="w-full max-w-4xl mx-auto bg-white text-black rounded-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500">
 
@@ -32,6 +34,13 @@ export function LandingPageView({ data, onBack }: LandingPageViewProps) {
                 <p className="text-xl text-gray-600 leading-relaxed">
                     {data.subheadline}
                 </p>
+
+                {contentLinks.length > 0 && (
+                    <div className="py-6">
+                        <ContentPreview links={contentLinks} className="max-w-md mx-auto" />
+                    </div>
+                )}
+
                 <div className="pt-4">
                     <Button size="lg" className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all">
                         {data.call_to_action}

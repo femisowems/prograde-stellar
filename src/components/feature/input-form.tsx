@@ -61,17 +61,49 @@ export function InputForm({ onSubmit, isLoading }: InputFormProps) {
                             className="min-h-[100px]"
                             required
                         />
+                        <div className="pt-2">
+                            <p className="text-xs text-muted-foreground mb-2">Not sure what to write? Tap a persona to auto-fill:</p>
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { label: "Fitness coach for busy professionals", text: "I am a fitness coach helping busy professionals burn fat and build muscle with 20-minute home workouts." },
+                                    { label: "UGC creator helping brands go viral", text: "I am a UGC creator who creates high-converting, viral-style short-form videos for direct-to-consumer beauty brands." },
+                                    { label: "Mom sharing budget meal prep", text: "I am a busy mom of three sharing budget-friendly, healthy meal prep recipes and time-saving kitchen hacks." }
+                                ].map((suggestion, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        onClick={() => setBio(suggestion.text)}
+                                        className="text-xs bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 px-3 py-1.5 rounded-full transition-all hover:scale-105 active:scale-95 text-left"
+                                        aria-label={`Auto-fill bio for ${suggestion.label}`}
+                                    >
+                                        {suggestion.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Top Content Links</Label>
+                        <div className="flex items-center justify-between">
+                            <Label>Top Content Links</Label>
+                            <span className="text-xs text-muted-foreground font-normal">Optional, but helps generate better offers</span>
+                        </div>
                         {links.map((link, index) => (
-                            <div key={index} className="flex gap-2">
-                                <Input
-                                    placeholder="https://youtube.com/..."
-                                    value={link}
-                                    onChange={(e) => updateLink(index, e.target.value)}
-                                />
+                            <div key={index} className="flex gap-2 items-center">
+                                {link.startsWith("data:image") ? (
+                                    <div className="relative group w-full">
+                                        <div className="flex items-center gap-4 bg-secondary/30 p-2 rounded-md border border-white/10">
+                                            <img src={link} alt="Upload preview" className="h-10 w-10 rounded object-cover border border-white/20" />
+                                            <span className="text-xs text-muted-foreground truncate flex-1">Image Uploaded</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <Input
+                                        placeholder="https://youtube.com/..."
+                                        value={link}
+                                        onChange={(e) => updateLink(index, e.target.value)}
+                                    />
+                                )}
                                 {links.length > 1 && (
                                     <Button
                                         type="button"
@@ -93,6 +125,43 @@ export function InputForm({ onSubmit, isLoading }: InputFormProps) {
                         >
                             <Plus className="h-3 w-3 mr-2" /> Add Link
                         </Button>
+                        <div className="inline-block ml-2">
+                            <input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                className="hidden"
+                                id="image-upload"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+
+                                    if (file.size > 5 * 1024 * 1024) {
+                                        alert("File size must be less than 5MB");
+                                        return;
+                                    }
+
+                                    const reader = new FileReader();
+                                    reader.onload = (event) => {
+                                        const result = event.target?.result as string;
+                                        if (result) {
+                                            setLinks((prev) => [...prev, result]);
+                                        }
+                                    };
+                                    reader.readAsDataURL(file);
+                                    // Reset input so same file can be selected again if needed
+                                    e.target.value = "";
+                                }}
+                            />
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => document.getElementById('image-upload')?.click()}
+                                className="mt-2 text-muted-foreground hover:text-white"
+                            >
+                                <Sparkles className="h-3 w-3 mr-2 text-indigo-400" /> Upload Image
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

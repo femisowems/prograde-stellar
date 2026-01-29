@@ -9,23 +9,34 @@ import { LandingPageView } from "@/components/feature/landing-page-view";
 
 export function Generator() {
     const [data, setData] = useState<AIResponse | null>(null);
+    const [userInput, setUserInput] = useState<UserInput | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [view, setView] = useState<'input' | 'results' | 'landing_page'>('input');
     // error state could be added here
 
     const handleGenerate = async (input: UserInput) => {
         setIsLoading(true);
+        setUserInput(input);
         try {
             const response = await fetch("/api/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(input),
             });
+
             const result = await response.json();
+
+            if (!response.ok || result.error) {
+                console.error("API Error:", result.error);
+                alert(`Error: ${result.error || "Failed to generate offer"}`);
+                return;
+            }
+
             setData(result);
             setView('results');
         } catch (error) {
             console.error("Failed to generate", error);
+            alert("An unexpected error occurred. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -42,6 +53,7 @@ export function Generator() {
             <div className="container mx-auto px-4 py-8">
                 <LandingPageView
                     data={data.best_offer_landing_page}
+                    contentLinks={userInput?.content_links || []}
                     onBack={() => setView('results')}
                 />
             </div>
@@ -55,6 +67,7 @@ export function Generator() {
                     analysis={data.analysis}
                     offers={data.generated_offers}
                     bestOfferIndex={data.selected_best_offer_index}
+                    contentLinks={userInput?.content_links || []}
                     onSelectOffer={(offer) => {
                         // In a real app we might generate a new LP for this specific offer.
                         // Here we just accept that the pre-generated LP is for the best offer.

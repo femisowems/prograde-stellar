@@ -4,19 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "lucide-react"; // Using lucide icon? No, I need a UI badge. I'll use a simple span style.
 import { CheckCircle2, ArrowRight } from "lucide-react";
 
+import { ContentPreview } from "./content-preview";
+
 interface OfferGridProps {
     analysis: AIAnalysis;
     offers: Offer[];
     bestOfferIndex: number;
     onSelectOffer: (offer: Offer) => void;
+    contentLinks?: string[];
 }
 
-export function OfferGrid({ analysis, offers, bestOfferIndex, onSelectOffer }: OfferGridProps) {
+export function OfferGrid({ analysis, offers, bestOfferIndex, onSelectOffer, contentLinks = [] }: OfferGridProps) {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
             {/* Analysis Section */}
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-4 max-w-2xl mx-auto">
                 <h2 className="text-2xl font-semibold">Diagnosis Complete</h2>
                 <div className="flex flex-wrap justify-center gap-4">
                     <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm">
@@ -30,6 +33,12 @@ export function OfferGrid({ analysis, offers, bestOfferIndex, onSelectOffer }: O
                         </span>
                     </div>
                 </div>
+
+                {contentLinks.length > 0 && (
+                    <div className="mt-6 pt-6 border-t border-white/10">
+                        <ContentPreview links={contentLinks} />
+                    </div>
+                )}
             </div>
 
             {/* Offers Grid */}

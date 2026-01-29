@@ -1,4 +1,4 @@
-import { MOCK_AI_RESPONSE } from "@/lib/mock-data";
+import { generateOffer } from "@/lib/ai";
 import { UserInput } from "@/types";
 import { NextResponse } from "next/server";
 
@@ -14,14 +14,9 @@ export async function POST(req: Request) {
             );
         }
 
-        // SIMULATION: In a real app, this is where we'd call the LLM
-        // const prompt = constructSystemPrompt(body);
-        // const aiResult = await callLLM(prompt);
+        const aiResult = await generateOffer(body);
 
-        // Simulate network delay for realism
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        return NextResponse.json(MOCK_AI_RESPONSE);
+        return NextResponse.json(aiResult);
     } catch (error) {
         console.error("Error processing request:", error);
         return NextResponse.json(
