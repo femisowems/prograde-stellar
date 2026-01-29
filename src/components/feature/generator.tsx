@@ -55,8 +55,32 @@ export function Generator() {
                     data={data.best_offer_landing_page}
                     contentLinks={userInput?.content_links || []}
                     onBack={() => setView('results')}
-                    onPurchase={() => {
-                        alert("Preview Mode: This button will initiate the payment flow (Stripe or Mock) in the published version.");
+                    onPurchase={async () => {
+                        // In preview, we treat the "best offer" as the target (data.generated_offers[selected_best_offer_index])
+                        const bestOffer = data.generated_offers[data.selected_best_offer_index || 0];
+                        if (!bestOffer) return;
+
+                        try {
+                            const res = await fetch("/api/purchase", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    offerId: `preview-${Date.now()}`, // Generate a temporary ID for the preview purchase
+                                    amount: bestOffer.suggested_price,
+                                    currency: bestOffer.currency
+                                })
+                            });
+
+                            if (!res.ok) throw new Error("Purchase failed");
+
+                            // Redirect to success page
+                            // We pass a flag or ID content to show it worked
+                            const json = await res.json();
+                            window.location.href = `/offers/success?offer_id=${json.purchaseId || 'preview-success'}&product_name=${encodeURIComponent(bestOffer.title)}`;
+                        } catch (err) {
+                            console.error(err);
+                            alert("Something went wrong with the purchase. Please try again.");
+                        }
                     }}
                 />
             </div>

@@ -45,7 +45,8 @@ export default function PublicOfferPage({ params }: { params: Promise<{ creatorS
 
         // Check if Stripe is enabled (via env var check on client side or API)
         // For MVP, we'll try Stripe first if key exists, else Mock
-        const isStripeEnabled = process.env.NEXT_PUBLIC_ENABLE_STRIPE === "true";
+        const isStripeEnabled = false; // Forced to false per user request for MVP demo
+        // const isStripeEnabled = process.env.NEXT_PUBLIC_ENABLE_STRIPE === "true"; // Original logic
 
         try {
             if (isStripeEnabled) {
@@ -79,7 +80,7 @@ export default function PublicOfferPage({ params }: { params: Promise<{ creatorS
                 });
 
                 if (!res.ok) throw new Error("Purchase failed");
-                router.push(`/offers/success?offer_id=${data.offer.id}`);
+                router.push(`/offers/success?offer_id=${data.offer.id}&product_name=${encodeURIComponent(data.offer.title)}`);
             }
         } catch (err) {
             console.error(err);

@@ -10,6 +10,7 @@ function SuccessContent() {
     const searchParams = useSearchParams();
     const sessionId = searchParams.get("session_id"); // From Stripe
     const offerId = searchParams.get("offer_id");
+    const productName = searchParams.get("product_name");
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -23,13 +24,19 @@ function SuccessContent() {
                     Your purchase has been confirmed. Check your email for next steps and access details.
                 </p>
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-8 text-sm text-left border border-gray-100">
-                    <p className="flex justify-between mb-2">
+                <div className="bg-gray-50 rounded-lg p-4 mb-8 text-sm text-left border border-gray-100 space-y-2">
+                    {productName && (
+                        <p className="flex justify-between pb-2 border-b border-gray-200">
+                            <span className="text-gray-500">Product:</span>
+                            <span className="font-semibold text-gray-900 text-right ml-4">{productName}</span>
+                        </p>
+                    )}
+                    <p className="flex justify-between">
                         <span className="text-gray-500">Status:</span>
                         <span className="font-medium text-green-600">Confirmed</span>
                     </p>
                     {sessionId && (
-                        <p className="flex justify-between mb-2">
+                        <p className="flex justify-between">
                             <span className="text-gray-500">Order ID:</span>
                             <span className="font-mono text-gray-700 truncate ml-4" title={sessionId}>{sessionId.slice(-8)}</span>
                         </p>
