@@ -47,16 +47,12 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export async function generateOffer(input: UserInput): Promise<AIResponse> {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
   // Separate links into text URLs and Image Data parts
   const textLinks: string[] = [];
   const imageParts: Array<{ inlineData: { data: string; mimeType: string } }> = [];
 
   input.content_links.forEach(link => {
     if (link.startsWith("data:image")) {
-      // Extract base64 data and mime type
-      // Format: data:image/png;base64,iVBORw0KGgo...
       const matches = link.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
       if (matches && matches.length === 3) {
         imageParts.push({
@@ -128,10 +124,25 @@ export async function generateOffer(input: UserInput): Promise<AIResponse> {
   // Append images found
   imageParts.forEach(part => requestParts.push(part));
 
-  const result = await model.generateContent({
-    contents: [{ role: "user", parts: requestParts }],
-    generationConfig: { responseMimeType: "application/json" }
-  });
+  let result;
+
+  try {
+    // PROMPT: Use gemini-3-flash as requested
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash" });
+    console.log("Attempting generation with gemini-3-flash...");
+    result = await model.generateContent({
+      contents: [{ role: "user", parts: requestParts }],
+      generationConfig: { responseMimeType: "application/json" }
+    });
+  } catch (error: any) {
+    console.warn("gemini-3-flash failed, attempting fallback to gemini-1.5-flash. Error:", error.message);
+    // Fallback to 1.5 Flash (More stable/higher quota)
+    const fallbackModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    result = await fallbackModel.generateContent({
+      contents: [{ role: "user", parts: requestParts }],
+      generationConfig: { responseMimeType: "application/json" }
+    });
+  }
 
   const text = result.response.text();
 
