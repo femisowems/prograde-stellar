@@ -17,10 +17,32 @@ export async function POST(req: Request) {
         const aiResult = await generateOffer(body);
 
         return NextResponse.json(aiResult);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error processing request:", error);
+
+        // Extract meaningful error message
+        let errorMessage = "Internal Server Error";
+        let errorDetails = "";
+
+        if (error instanceof Error) {
+            errorMessage = error.message;
+            errorDetails = error.stack || "";
+        } else if (typeof error === "object") {
+            try {
+                errorMessage = JSON.stringify(error);
+            } catch {
+                errorMessage = String(error);
+            }
+        } else {
+            errorMessage = String(error);
+        }
+
         return NextResponse.json(
-            { error: "Internal Server Error" },
+            {
+                error: errorMessage,
+                details: errorDetails,
+                model: "gemini-2.5-flash" // Confirming which model was attempted
+            },
             { status: 500 }
         );
     }

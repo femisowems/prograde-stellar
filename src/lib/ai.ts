@@ -40,7 +40,11 @@ const AIResponseSchema = z.object({
 });
 
 // Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
+const apiKey = process.env.GOOGLE_API_KEY;
+if (!apiKey) {
+  console.error("GOOGLE_API_KEY is missing");
+}
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export async function generateOffer(input: UserInput): Promise<AIResponse> {
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
