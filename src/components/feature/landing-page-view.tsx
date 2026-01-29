@@ -1,15 +1,16 @@
-import { LandingPage } from "@/types";
+import { LandingPageContent } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown, ArrowLeft } from "lucide-react";
 import { ContentPreview } from "./content-preview";
 
 interface LandingPageViewProps {
-    data: LandingPage;
+    data: LandingPageContent;
     onBack: () => void;
     contentLinks?: string[];
+    onPurchase?: () => void;
 }
 
-export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPageViewProps) {
+export function LandingPageView({ data, onBack, contentLinks = [], onPurchase }: LandingPageViewProps) {
     return (
         <div className="w-full max-w-4xl mx-auto bg-white text-black rounded-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500">
 
@@ -42,7 +43,11 @@ export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPage
                 )}
 
                 <div className="pt-4">
-                    <Button size="lg" className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all">
+                    <Button
+                        size="lg"
+                        className="bg-black hover:bg-gray-800 text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all"
+                        onClick={onPurchase}
+                    >
                         {data.call_to_action}
                     </Button>
                 </div>
@@ -53,7 +58,7 @@ export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPage
                 <div className="max-w-2xl mx-auto space-y-4">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 text-center mb-8">What's Included</h3>
                     <div className="grid gap-4">
-                        {data.value_bullets.map((bullet, i) => (
+                        {data.value_bullets.map((bullet: string, i: number) => (
                             <div key={i} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 shadow-sm">
                                 <div className="bg-green-100 text-green-700 p-1 rounded-full shrink-0 mt-0.5">
                                     <Check className="h-4 w-4" />
@@ -78,7 +83,7 @@ export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPage
             <div className="px-8 py-16 max-w-2xl mx-auto space-y-8">
                 <h3 className="text-2xl font-bold text-center text-gray-900">Frequently Asked Questions</h3>
                 <div className="space-y-4">
-                    {data.faqs.map((faq, i) => (
+                    {data.faqs.map((faq: { question: string; answer: string }, i: number) => (
                         <div key={i} className="border-b border-gray-200 pb-4">
                             <h4 className="font-semibold text-gray-900 mb-2 flex items-center justify-between">
                                 {faq.question}

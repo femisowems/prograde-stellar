@@ -1,4 +1,4 @@
-import { AIAnalysis, Offer } from "@/types";
+import { AIAnalysis, GeneratedOffer } from "@/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "lucide-react"; // Using lucide icon? No, I need a UI badge. I'll use a simple span style.
@@ -8,13 +8,13 @@ import { ContentPreview } from "./content-preview";
 
 interface OfferGridProps {
     analysis: AIAnalysis;
-    offers: Offer[];
-    bestOfferIndex: number;
-    onSelectOffer: (offer: Offer) => void;
+    offers: GeneratedOffer[];
+    bestOfferIndex?: number;
+    onSelectOffer: (offer: GeneratedOffer) => void;
     contentLinks?: string[];
 }
 
-export function OfferGrid({ analysis, offers, bestOfferIndex, onSelectOffer, contentLinks = [] }: OfferGridProps) {
+export function OfferGrid({ analysis, offers, bestOfferIndex = 0, onSelectOffer, contentLinks = [] }: OfferGridProps) {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 

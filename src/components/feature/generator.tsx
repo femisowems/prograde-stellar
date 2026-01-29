@@ -42,7 +42,7 @@ export function Generator() {
         }
     };
 
-    if (view === "landing_page" && data) {
+    if (view === "landing_page" && data && data.best_offer_landing_page) {
         // If user selected an offer, we show that offer's landing page (OR the best one if we want to fallback)
         // For this prototype, we'll assume the API returns the landing page for the "Best" offer.
         // Ideally the API generates a specific landing page for the *selected* offer, but to keep it simple as per spec:
@@ -55,6 +55,9 @@ export function Generator() {
                     data={data.best_offer_landing_page}
                     contentLinks={userInput?.content_links || []}
                     onBack={() => setView('results')}
+                    onPurchase={() => {
+                        alert("Preview Mode: This button will initiate the payment flow (Stripe or Mock) in the published version.");
+                    }}
                 />
             </div>
         );
