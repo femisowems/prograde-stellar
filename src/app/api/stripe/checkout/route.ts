@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { isStripeEnabled } from "@/lib/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2025-01-27.acacia", // Use latest API version or pin one
+    apiVersion: "2026-01-28.clover", // Use latest API version as required by installed package
 });
 
 export async function POST(request: NextRequest) {
