@@ -58,7 +58,16 @@ export function LandingPageView({ data, onBack, contentLinks = [] }: LandingPage
                                 <div className="bg-green-100 text-green-700 p-1 rounded-full shrink-0 mt-0.5">
                                     <Check className="h-4 w-4" />
                                 </div>
-                                <span className="font-medium text-gray-800">{bullet}</span>
+                                <span className="text-gray-800">
+                                    {bullet.includes(":") ? (
+                                        <>
+                                            <span className="font-bold text-gray-900">{bullet.split(":")[0]}:</span>
+                                            {bullet.substring(bullet.indexOf(":") + 1)}
+                                        </>
+                                    ) : (
+                                        bullet
+                                    )}
+                                </span>
                             </div>
                         ))}
                     </div>

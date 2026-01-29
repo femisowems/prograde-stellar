@@ -108,7 +108,7 @@ export async function generateOffer(input: UserInput): Promise<AIResponse> {
       "best_offer_landing_page": {
         "headline": "...",
         "subheadline": "...",
-        "value_bullets": ["point 1", "point 2", "point 3", "point 4"],
+        "value_bullets": ["Title: Description", "Title: Description", "Title: Description", "Title: Description"],
         "call_to_action": "...",
         "faqs": [
           { "question": "...", "answer": "..." },
