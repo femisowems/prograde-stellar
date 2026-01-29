@@ -8,18 +8,30 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { AudienceType, MonetizationGoal, UserInput } from "@/types";
-import { Loader2, Sparkles, Plus, Trash2 } from "lucide-react";
+import { Loader2, Sparkles, Plus, Trash2, RefreshCcw } from "lucide-react";
 
 interface InputFormProps {
     onSubmit: (data: UserInput) => void;
     isLoading: boolean;
 }
 
+// Defined outside component to avoid recreation
+const ALL_SUGGESTIONS = [
+    { label: "Fitness coach for busy professionals", text: "I am a fitness coach helping busy professionals burn fat and build muscle with 20-minute home workouts." },
+    { label: "UGC creator helping brands go viral", text: "I am a UGC creator who creates high-converting, viral-style short-form videos for direct-to-consumer beauty brands." },
+    { label: "Mom sharing budget meal prep", text: "I am a busy mom of three sharing budget-friendly, healthy meal prep recipes and time-saving kitchen hacks." },
+    { label: "Tech reviewer for coding setups", text: "I review developer productivity tools and desk setups to help software engineers optimize their workflow." },
+    { label: "Digital artist teaching Procreate", text: "I teach beginners how to create stunning digital art on an iPad using Procreate with step-by-step tutorials." },
+    { label: "Solo traveler on a budget", text: "I share travel hacks and itineraries for solo female travelers exploring Europe on a budget." },
+    { label: "Notion template architect", text: "I design complex Notion systems to help freelancers and agencies organize their projects and client communication." }
+];
+
 export function InputForm({ onSubmit, isLoading }: InputFormProps) {
     const [bio, setBio] = useState("");
     const [links, setLinks] = useState<string[]>([""]);
     const [audience, setAudience] = useState<AudienceType>("general");
     const [goal, setGoal] = useState<MonetizationGoal>("quick_cash");
+    const [currentSuggestions, setCurrentSuggestions] = useState(ALL_SUGGESTIONS.slice(0, 3));
 
     const addLink = () => setLinks([...links, ""]);
     const removeLink = (index: number) => setLinks(links.filter((_, i) => i !== index));
@@ -27,6 +39,12 @@ export function InputForm({ onSubmit, isLoading }: InputFormProps) {
         const newLinks = [...links];
         newLinks[index] = value;
         setLinks(newLinks);
+    };
+
+    const handleRefreshSuggestions = () => {
+        // Shuffle and pick 3
+        const shuffled = [...ALL_SUGGESTIONS].sort(() => 0.5 - Math.random());
+        setCurrentSuggestions(shuffled.slice(0, 3));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -62,13 +80,21 @@ export function InputForm({ onSubmit, isLoading }: InputFormProps) {
                             required
                         />
                         <div className="pt-2">
-                            <p className="text-xs text-muted-foreground mb-2">Not sure what to write? Tap a persona to auto-fill:</p>
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-muted-foreground">Not sure what to write? Tap a persona to auto-fill:</p>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6 text-muted-foreground hover:text-white"
+                                    onClick={handleRefreshSuggestions}
+                                    title="Refresh suggestions"
+                                >
+                                    <RefreshCcw className="h-3 w-3" />
+                                </Button>
+                            </div>
                             <div className="flex flex-wrap gap-2">
-                                {[
-                                    { label: "Fitness coach for busy professionals", text: "I am a fitness coach helping busy professionals burn fat and build muscle with 20-minute home workouts." },
-                                    { label: "UGC creator helping brands go viral", text: "I am a UGC creator who creates high-converting, viral-style short-form videos for direct-to-consumer beauty brands." },
-                                    { label: "Mom sharing budget meal prep", text: "I am a busy mom of three sharing budget-friendly, healthy meal prep recipes and time-saving kitchen hacks." }
-                                ].map((suggestion, index) => (
+                                {currentSuggestions.map((suggestion, index) => (
                                     <button
                                         key={index}
                                         type="button"
