@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Offer Generator (Prograde Stellar)
 
-## Getting Started
+An intelligent application designed to help creators monetize their audience by analyzing their profile and generating tailored business offers. Powered by Google's Gemini AI, it creates instant, high-converting landing page previews for digital products, services, or subscriptions.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+-   **AI-Powered Analysis**: Analyzes creator bios and content links (text & images) to understand niche and audience pain points.
+-   **Smart Offer Generation**: Brainstorms three distinct offer types (Digital Product, Service, Subscription) and selects the best one.
+-   **Dynamic Landing Pages**: Generates a full landing page copy including headlines, value propositions, features, and FAQs.
+-   **Interactive Preview**: Displays the generated offer in a polished, interactive "Mock Browser" preview.
+-   **Features Grid**: Automatically generates key features with relevant icons (Chart, Time, Money, etc.).
+-   **Payment Flows**: Supports both a Mock Payment flow (for demos) and real Stripe integration.
+
+## 🛠 Tech Stack
+
+-   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+-   **Language**: TypeScript
+-   **AI Model**: Google Gemini 1.5 Flash / Pro (via `@google/generative-ai`)
+-   **Styling**: Tailwind CSS
+-   **Validation**: Zod
+-   **Icons**: Lucide React
+-   **State Management**: React Hooks
+
+## 🏁 Getting Started
+
+### Prerequisites
+
+-   Node.js 18+ installed
+-   A Google Cloud API Key with access to Gemini API
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/femisowems/prograde-stellar.git
+    cd prograde-stellar
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+
+3.  **Environment Setup:**
+    Create a `.env.local` file in the root directory and add the following:
+
+    ```env
+    # Required for AI Generation
+    GOOGLE_API_KEY=your_gemini_api_key_here
+
+    # Optional: For Real Payments (Defaults to Mock if disabled)
+    NEXT_PUBLIC_ENABLE_STRIPE=false
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+    STRIPE_SECRET_KEY=sk_test_...
+    ```
+
+4.  **Run the Development Server:**
+    ```bash
+    npm run dev
+    ```
+
+5.  Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📂 Project Structure
+
+```
+src/
+├── app/                  # App Router pages and API routes
+│   ├── api/generate/     # AI generation endpoint
+│   ├── offers/           # Dynamic offer pages
+│   └── page.tsx          # Home/Input page
+├── components/
+│   ├── feature/          # App-specific components (LandingPageView, InputForm)
+│   └── ui/               # Reusable UI components (Button, Card, etc.)
+├── lib/
+│   ├── ai.ts             # Gemini AI integration and prompt logic
+│   └── utils.ts          # Helper functions
+└── types/                # TypeScript interfaces and Zod schemas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧠 AI Logic
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The application uses a structured prompt to guide the AI:
+1.  **Context**: "You are an expert AI business consultant..."
+2.  **Input**: Takes creator bio, content links, and optional images.
+3.  **Output**: Returns a strict JSON object containing the analysis, 3 offer ideas, and the selected best offer with full landing page content.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🤝 Contributing
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome! Please feel free to submit a Pull Request.
